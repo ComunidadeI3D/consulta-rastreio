@@ -19,11 +19,14 @@
       font-weight: bold;
       color: green;
     }
+    .erro {
+      color: red;
+    }
   </style>
 </head>
 <body>
   <h2>🔎 Consulta de Código de Rastreio</h2>
-  <input type="text" id="cpf" placeholder="Digite seu CPF" maxlength="11">
+  <input type="text" id="cpf" placeholder="Insira seu CPF (somente números)" maxlength="11">
   <br>
   <button onclick="buscar()">Buscar</button>
   <p id="resposta"></p>
@@ -31,24 +34,34 @@
   <script>
     async function buscar() {
       const cpf = document.getElementById("cpf").value.trim();
-      if (!cpf || cpf.length !== 11) {
-        document.getElementById("resposta").innerText = "CPF inválido.";
+      const resposta = document.getElementById("resposta");
+
+      if (!cpf || cpf.length !== 11 || !/^\d+$/.test(cpf)) {
+        resposta.innerText = "CPF inválido.";
+        resposta.classList.add("erro");
         return;
       }
 
       try {
         const res = await fetch("https://consulta-rastreio.onrender.com/rastreio", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cpf: cpf })
         });
 
         const data = await res.json();
-        document.getElementById("resposta").innerText = data.rastreio || data.erro;
+
+        if (data.rastreio) {
+          resposta.innerText = "📦 Código de rastreio: " + data.rastreio;
+          resposta.classList.remove("erro");
+        } else {
+          resposta.innerText = "Ainda não existe envios para esse CPF.";
+          resposta.classList.add("erro");
+        }
+
       } catch (err) {
-        document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
+        resposta.innerText = "Erro ao consultar. Tente novamente.";
+        resposta.classList.add("erro");
       }
     }
   </script>
