@@ -2,23 +2,11 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Consulta de Rastreio</title>
+  <title>🔎 Consulta de Código de Rastreio</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      text-align: center;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    #resposta {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
+    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
+    input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
+    #resposta { margin-top: 20px; font-weight: bold; color: green; }
   </style>
 </head>
 <body>
@@ -43,4 +31,12 @@
           body: JSON.stringify({ cpf: cpf })
         });
 
-        const data = await
+        const data = await res.json();
+        document.getElementById("resposta").innerText = data.rastreio || data.erro;
+      } catch (err) {
+        document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
+      }
+    }
+  </script>
+</body>
+</html>
