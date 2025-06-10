@@ -2,44 +2,55 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>🔎 Consulta de Código de Rastreio 2</title>
+  <title>🔎 Consulta de Código de Rastreio</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
-    input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
-    #resposta { margin-top: 20px; font-weight: bold; color: green; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #resposta {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
   </style>
 </head>
 <body>
-  <h2>🔎 Consulta de Código de Rastreio 2</h2>
+  <h2>🔎 Consulta de Código de Rastreio</h2>
   <input type="text" id="cpf" placeholder="Digite seu CPF" maxlength="11">
   <br>
   <button onclick="buscar()">Buscar</button>
   <p id="resposta"></p>
 
- <script>
-  async function buscar() {
-    const cpf = document.getElementById("cpf").value.trim();
-    if (!cpf || cpf.length !== 11) {
-      document.getElementById("resposta").innerText = "CPF inválido.";
-      return;
+  <script>
+    async function buscar() {
+      const cpf = document.getElementById("cpf").value.trim();
+      if (!cpf || cpf.length !== 11) {
+        document.getElementById("resposta").innerText = "CPF inválido.";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://consulta-rastreio.onrender.com/rastreio", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ cpf: cpf })
+        });
+
+        const data = await res.json();
+        document.getElementById("resposta").innerText = data.rastreio || data.erro;
+      } catch (err) {
+        document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
+      }
     }
-
-    try {
-      const res = await fetch("https://consulta-rastreio.onrender.com/rastreio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ cpf: cpf })
-      });
-
-      const data = await res.json();
-      document.getElementById("resposta").innerText = data.rastreio || data.erro;
-    } catch (err) {
-      document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
-    }
-  }
-</script>
-
+  </script>
 </body>
 </html>
