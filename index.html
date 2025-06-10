@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>🔎 Consulta de Código de Rastreio</title>
+  <title>🔎 Consulta de Rastreio</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,8 +51,8 @@
 
         const data = await res.json();
 
-        if (data.rastreio) {
-          resposta.innerText = "📦 Código de rastreio: " + data.rastreio;
+        if (data.rastreio && data.nome) {
+          resposta.innerText = `Oi ${data.nome}, o seu rastreio é: ${data.rastreio}`;
           resposta.classList.remove("erro");
         } else {
           resposta.innerText = "Ainda não existe envios para esse CPF.";
