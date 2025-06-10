@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import csv
 
 app = Flask(__name__)
+CORS(app)
 
 def carregar_dados():
     dados = {}
