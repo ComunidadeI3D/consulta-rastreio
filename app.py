@@ -10,10 +10,11 @@ def carregar_dados():
     with open("dados.csv", newline='', encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            row = {k.strip().lower(): v.strip() for k, v in row.items()}  # padroniza colunas
-            cpf = row.get("cpf")
-            nome = row.get("nome")
-            rastreio = row.get("rastreamento")
+            # padroniza colunas e mantém CPF com 11 dígitos
+            row = {k.strip().lower(): v.strip() for k, v in row.items()}
+            cpf = row.get("cpf", "").zfill(11)
+            nome = row.get("nome", "")
+            rastreio = row.get("rastreamento", "")
             if cpf and nome and rastreio:
                 dados[cpf] = {"nome": nome, "rastreio": rastreio}
     return dados
@@ -21,7 +22,7 @@ def carregar_dados():
 @app.route("/rastreio", methods=["POST"])
 def rastrear():
     try:
-        cpf = request.json.get("cpf")
+        cpf = request.json.get("cpf", "").zfill(11)
         if not cpf:
             return jsonify({"erro": "CPF não enviado"}), 400
 
