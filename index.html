@@ -16,27 +16,30 @@
   <button onclick="buscar()">Buscar</button>
   <p id="resposta"></p>
 
-  <script>
-    async function buscar() {
-      const cpf = document.getElementById("cpf").value.trim();
-      if (!cpf || cpf.length !== 11) {
-        document.getElementById("resposta").innerText = "CPF inválido.";
-        return;
-      }
-
-      try {
-        const res = await fetch("https://consulta-rastreio.onrender.com/rastreio", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cpf: cpf })
-        });
-
-        const data = await res.json();
-        document.getElementById("resposta").innerText = data.rastreio || data.erro;
-      } catch (err) {
-        document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
-      }
+ <script>
+  async function buscar() {
+    const cpf = document.getElementById("cpf").value.trim();
+    if (!cpf || cpf.length !== 11) {
+      document.getElementById("resposta").innerText = "CPF inválido.";
+      return;
     }
-  </script>
+
+    try {
+      const res = await fetch("https://consulta-rastreio.onrender.com/rastreio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ cpf: cpf })
+      });
+
+      const data = await res.json();
+      document.getElementById("resposta").innerText = data.rastreio || data.erro;
+    } catch (err) {
+      document.getElementById("resposta").innerText = "Erro ao consultar. Tente novamente.";
+    }
+  }
+</script>
+
 </body>
 </html>
