@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # <- ESTA LINHA FALTAVA
 import csv
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # <- Isso agora vai funcionar corretamente
 
 def carregar_dados():
     dados = {}
